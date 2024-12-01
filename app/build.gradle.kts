@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.marvelcomposablemvi"
+    namespace = "com.example.marvelComposableMvi"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.marvelcomposablemvi"
+        applicationId = "com.example.marvelComposableMvi"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

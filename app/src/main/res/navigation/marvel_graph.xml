@@ -6,15 +6,15 @@
 
     <fragment
         android:id="@+id/marvelListFragment"
-        android:name="com.example.marvelcomposablemvi.feature.marvelList.view.MarvelListFragment"
+        android:name="com.example.marvelComposableMvi.feature.marvelList.view.MarvelListFragment"
         android:label="fragment_marvel_list">
     </fragment>
 
     <fragment
         android:id="@+id/marvelDetailsFragment"
-        android:name="com.example.marvelcomposablemvi.feature.details.view.DetailsMarvelFragment"
+        android:name="com.example.marvelComposableMvi.feature.details.view.DetailsMarvelFragment"
         android:label="fragment_marvel_details" >
         <argument android:name="character"
-            app:argType="com.example.marvelcomposablemvi.feature.marvelList.domain.models.Character"/>
+            app:argType="com.example.marvelComposableMvi.feature.marvelList.domain.models.Character"/>
     </fragment>
 </navigation>
