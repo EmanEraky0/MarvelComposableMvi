@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/marvelListFragment"
+    android:id="@+id/marvel_graph">
+
+    <fragment
+        android:id="@+id/marvelListFragment"
+        android:name="com.example.marvelcomposablemvi.feature.marvelList.view.MarvelListFragment"
+        android:label="fragment_marvel_list">
+    </fragment>
+
+    <fragment
+        android:id="@+id/marvelDetailsFragment"
+        android:name="com.example.marvelcomposablemvi.feature.details.view.DetailsMarvelFragment"
+        android:label="fragment_marvel_details" >
+        <argument android:name="character"
+            app:argType="com.example.marvelcomposablemvi.feature.marvelList.domain.models.Character"/>
+    </fragment>
+</navigation>
