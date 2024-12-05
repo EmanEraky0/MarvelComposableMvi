@@ -96,4 +96,9 @@ dependencies {
 
     implementation (libs.androidx.runtime.livedata)
 
+    //pager
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
+
+
 }

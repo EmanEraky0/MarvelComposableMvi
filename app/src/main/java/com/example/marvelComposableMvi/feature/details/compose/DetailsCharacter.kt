@@ -2,7 +2,10 @@ package com.example.marvelComposableMvi.feature.details.compose
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,10 +14,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Text
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -105,28 +112,42 @@ fun SectionCharacter(
         "Events" -> state?.events
         else -> emptyList()
     }
+    val indexImage = remember { mutableIntStateOf(0) }
+    val showImageSlider = remember { mutableStateOf(false) }
+    val selectedSectionItems = remember { mutableStateOf<List<Item>>(emptyList()) }
 
+    if (showImageSlider.value) {
+        // Show ImageSlider
+        ImageSlider(sectionList = selectedSectionItems.value,indexImage.value) {
+            showImageSlider.value = false // Close slider on back action
+        }
 
-    if ((state?.isLoadingComics == true || state?.isLoadingSeries == true || state?.isLoadingEvent == true || state?.isLoadingStories == true) && sectionItems.isNullOrEmpty()) {
-        Loading()
-    } else if (!(state?.errorMessage.isNullOrBlank()) && sectionItems.isNullOrEmpty()) {
-        Text(
-            text = state?.errorMessage ?: "",
-            color = Color.Red,
-            modifier = Modifier.padding(16.dp)
-        )
     } else {
-        if (!sectionItems.isNullOrEmpty()) {
-            Column(modifier = Modifier.padding(start = 10.dp)) {
-                Text(
-                    text = nameSection,
-                    fontSize = 18.sp,
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 10.dp, bottom = 5.dp)
-                )
-                LazyRow {
-                    items(items = sectionItems) { item ->
-                        CardSection(item)
+        if ((state?.isLoadingComics == true || state?.isLoadingSeries == true || state?.isLoadingEvent == true || state?.isLoadingStories == true) && sectionItems.isNullOrEmpty()) {
+            Loading()
+        } else if (!(state?.errorMessage.isNullOrBlank()) && sectionItems.isNullOrEmpty()) {
+            Text(
+                text = state?.errorMessage ?: "",
+                color = Color.Red,
+                modifier = Modifier.padding(16.dp)
+            )
+        } else {
+            if (!sectionItems.isNullOrEmpty()) {
+                Column(modifier = Modifier.padding(start = 10.dp)) {
+                    Text(
+                        text = nameSection,
+                        fontSize = 18.sp,
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 10.dp, bottom = 5.dp)
+                    )
+                    LazyRow {
+                        itemsIndexed(sectionItems) { index, item ->
+                            CardSection(item){
+                                indexImage.value =index
+                                selectedSectionItems.value = sectionItems
+                                showImageSlider.value =true
+                            }
+                        }
                     }
                 }
             }
@@ -136,8 +157,9 @@ fun SectionCharacter(
 
 
 @Composable
-fun CardSection(item: Item) {
-    Column {
+fun CardSection(item: Item,  onClick: (Item) -> Unit) {
+
+    Column(Modifier.clickable {onClick(item) }) {
         val painter = rememberAsyncImagePainter(model = item.resourceURI.replace("http", "https"))
 
         Image(
@@ -158,7 +180,6 @@ fun CardSection(item: Item) {
             lineHeight = TextUnit.Unspecified,
             maxLines = 2
         )
-
     }
 
 }
